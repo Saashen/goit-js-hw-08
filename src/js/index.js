@@ -1,6 +1,11 @@
 import images from './gallery-items.js';
 
 const gallery = document.querySelector('.gallery');
+const lightBox = document.querySelector('.lightbox');
+const closeLightBoxBtn = document.querySelector(
+  'button[data-action="close-lightbox"]',
+);
+const lightBoxImage = lightBox.children[1].children[0];
 
 const html = images
   .map(
@@ -33,14 +38,40 @@ function handleImageClick(event) {
   const target = event.target;
   if (target.nodeName !== 'IMG') return;
   setActiveLink(target);
+  lightBoxImage.scr = target.dataset.source;
+  lightBoxImage.alt = target.alt;
+
+  console.log(target.dataset.source);
 }
 
 function setActiveLink(nextActiveLink) {
   const currentActiveLink = gallery.querySelector('img.active');
-
   if (currentActiveLink) {
     currentActiveLink.classList.remove('active');
   }
-
   nextActiveLink.classList.add('active');
+
+  nextActiveLink.addEventListener('click', openLightBox);
+  closeLightBoxBtn.addEventListener('click', closeLightBox);
+  lightBox.addEventListener('click', closeLightBoxModal);
+}
+
+function openLightBox() {
+  lightBox.classList.add('is-open');
+  window.addEventListener('keydown', closeLightBoxByEsc);
+}
+
+function closeLightBox() {
+  lightBox.classList.remove('is-open');
+  window.removeEventListener('keydown', closeLightBoxByEsc);
+}
+
+function closeLightBoxModal(event) {
+  if (event.target !== event.currentTarget) return;
+  closeLightBox();
+}
+
+function closeLightBoxByEsc(event) {
+  if (event.code !== 'Escape') return;
+  closeLightBox();
 }
