@@ -66,10 +66,6 @@ function closeLightBox() {
 }
 
 function closeLightBoxModal(event) {
-  console.log('target', event.target);
-  console.log('current target', event.currentTarget);
-  console.dir(lightBox.children[1]);
-
   if (event.target !== lightBox.children[1]) return;
   closeLightBox();
 }
