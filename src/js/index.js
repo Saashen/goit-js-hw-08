@@ -38,10 +38,8 @@ function handleImageClick(event) {
   const target = event.target;
   if (target.nodeName !== 'IMG') return;
   setActiveLink(target);
-  lightBoxImage.scr = target.dataset.source;
-  lightBoxImage.alt = target.alt;
 
-  console.log(target.dataset.source);
+
 }
 
 function setActiveLink(nextActiveLink) {
@@ -50,6 +48,9 @@ function setActiveLink(nextActiveLink) {
     currentActiveLink.classList.remove('active');
   }
   nextActiveLink.classList.add('active');
+
+  lightBoxImage.src = nextActiveLink.dataset.source;
+  lightBoxImage.alt = nextActiveLink.alt;
 
   nextActiveLink.addEventListener('click', openLightBox);
   closeLightBoxBtn.addEventListener('click', closeLightBox);
@@ -67,7 +68,11 @@ function closeLightBox() {
 }
 
 function closeLightBoxModal(event) {
-  if (event.target !== event.currentTarget) return;
+  console.log('target', event.target)
+  console.log('current target', event.currentTarget)
+  console.dir(lightBox.children[1])
+
+  if (event.target !== lightBox.children[1]) return;
   closeLightBox();
 }
 
