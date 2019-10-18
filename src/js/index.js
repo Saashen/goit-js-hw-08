@@ -29,7 +29,6 @@ const html = images
   .join('\n');
 
 gallery.insertAdjacentHTML('afterbegin', html);
-
 gallery.addEventListener('click', handleImageClick);
 
 function handleImageClick(event) {
@@ -45,19 +44,31 @@ function setActiveLink(nextActiveLink) {
   lightBoxImage.alt = nextActiveLink.alt;
 
   const currentActiveLink = gallery.querySelector('img.active');
-  if (currentActiveLink) {
-    currentActiveLink.classList.remove('active');
-  }
-  nextActiveLink.classList.add('active');
+  const activeElement = { link: currentActiveLink };
+  const activeLink = activeElement.link;
 
-  nextActiveLink.addEventListener('click', openLightBox);
-  closeLightBoxBtn.addEventListener('click', closeLightBox);
-  lightBox.addEventListener('click', closeLightBoxModal);
-}
+  //Минулий варіант гарний тим, що завантажується одразу потрібна картинка.
+  //
+  // const currentActiveLink = gallery.querySelector('img.active');
+  // if (currentActiveLink) {
+  //   currentActiveLink.classList.remove('active');
+  // }
+  // nextActiveLink.classList.add('active');
 
-function openLightBox() {
+  //А тут при повільному інтернеті або занадто швидкому перемиканню,
+  //спочатку "висить" стара картинка, а потім уже її замінює нова
+  if (activeLink === null) {
+    nextActiveLink.classList.add('active');
+  } else if (activeLink !== nextActiveLink) {
+    activeLink.classList.remove('active');
+    nextActiveLink.classList.add('active');
+  } else return;
+  console.log(nextActiveLink);
+
   lightBox.classList.add('is-open');
   window.addEventListener('keydown', closeLightBoxByEsc);
+  closeLightBoxBtn.addEventListener('click', closeLightBox);
+  lightBox.addEventListener('click', closeLightBoxModal);
 }
 
 function closeLightBox() {
